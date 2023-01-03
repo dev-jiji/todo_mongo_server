@@ -81,3 +81,63 @@ app.post("/api/post/list", (req, res) => {
       res.status(400).json({ success: false });
     });
 });
+
+// 할일의 completes를 업데이트
+app.post("/api/post/updatetoggle", (req, res) => {
+  let temp = {
+    completed: req.body.completed,
+  };
+  // console.log(req.body)
+  // mongoose 문서참조
+  Todo.updateOne({ id: req.body.id }, { $set: temp })
+    .exec()
+    .then(() => {
+      // console.log("completed 업데이트 완료");
+      res.status(200).json({ success: true });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+// 타이틀 업데이트
+app.post("/api/post/updatetitle", (req, res) => {
+  let temp = {
+    title: req.body.title,
+  };
+  Todo.updateOne({ id: req.body.id }, { $set: temp })
+    .exec()
+    .then(() => {
+      console.log("title 업데이트 완료");
+      res.status(200).json({ success: true });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+// 할일 삭제
+app.post("/api/post/delete", (req, res) => {
+  console.log(req.body);
+  Todo.deleteOne({ id: req.body.id })
+    .then(() => {
+      res.status(200).json({ success: true });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({ success: false });
+    });
+});
+
+// 전체 할일 삭제
+app.post("/api/post/deleteall", (req, res) => {
+  Todo.deleteMany()
+    .exec()
+    .then(() => {
+      res.status(200).json({ success: true });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json({ success: false });
+    });
+});
